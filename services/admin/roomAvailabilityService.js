@@ -142,6 +142,36 @@ const setAvailabilityForDateRange = async (roomId, startDate, endDate, available
   return results;
 };
 
+const searchAvailableRooms = async (checkInDate, checkOutDate, filters) => {
+  const formattedStart = format(new Date(checkInDate), 'yyyy-MM-dd');
+  const formattedEnd = format(new Date(checkOutDate), 'yyyy-MM-dd');
+
+  const allRooms = await roomModel.findAllRooms();
+  const filteredRooms = [];
+
+  for (const room of allRooms) {
+    const availabilities = await roomAvailabilityModel.findAvailability(room.id, formattedStart, formattedEnd);
+    if (availabilities.length < 1) continue;
+
+    const allAvailable = availabilities.every(a => a.available_rooms > 0);
+    if (!allAvailable) continue;
+
+    if (filters.location || filters.numGuests || filters.roomType) {
+      const hotel = await hotelModel.findHotelById(room.hotel_id);
+      if (!hotel) continue;
+
+      if (filters.location && !hotel.location.toLowerCase().includes(filters.location.toLowerCase())) continue;
+      if (filters.numGuests && room.capacity < parseInt(filters.numGuests)) continue;
+      if (filters.roomType && room.room_type.toLowerCase() !== filters.roomType.toLowerCase()) continue;
+    }
+
+    filteredRooms.push(room);
+  }
+
+  return filteredRooms;
+};
+
+
 
 module.exports = {
   createOrUpdateAvailability,
@@ -150,4 +180,5 @@ module.exports = {
   updateAvailabilityRecord,
   deleteAvailabilityRecord,
   setAvailabilityForDateRange, // New function for bulk updates
+  searchAvailableRooms
 };
