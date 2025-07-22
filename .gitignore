@@ -1,0 +1,52 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.npm/
+.eslintcache
+.prettierignore # If you want to ignore prettier config from git
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local # Catch-all for other local env files
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Build artifacts
+dist/
+build/
+out/
+.next/ # For Next.js projects (if you switch to it)
+
+# Testing
+coverage/
+.nyc_output/
+
+# Dependency directories
+jspm_packages/
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Database specific (if generated in project root)
+*.sqlite
+*.sqlite3
+/data/ # if you have a local data directory for DB files

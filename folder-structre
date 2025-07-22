@@ -1,0 +1,56 @@
+hotel-booking-backend/
+├── node_modules/
+├── .env
+├── package.json
+├── package-lock.json
+├── app.js
+├── middlewares/
+│   ├── authMiddleware.js
+│   └── errorHandler.js
+├── config/
+│   └── database.js
+├── models/
+│   ├── userModel.js
+│   ├── hotelModel.js
+│   ├── roomModel.js
+│   ├── roomAvailabilityModel.js
+│   └── bookingModel.js
+├── services/
+│   ├── auth/
+│   │   └── authService.js
+│   ├── public/
+│   │   └── hotelSearchService.js
+│   ├── guest/
+│   │   ├── bookingService.js
+│   │   └── profileService.js
+│   ├── hotelManager/
+│   │   ├── hotelManagerService.js
+│   │   └── roomManagementService.js
+│   └── admin/
+│       ├── adminHotelService.js
+│       ├── adminUserService.js
+│       └── adminRoomService.js
+├── controllers/
+│   ├── auth/
+│   │   └── authController.js
+│   ├── public/
+│   │   └── hotelSearchController.js
+│   ├── guest/
+│   │   ├── bookingController.js
+│   │   └── profileController.js
+│   ├── hotelManager/
+│   │   ├── hotelManagerController.js
+│   │   └── roomManagementController.js
+│   └── admin/
+│       ├── adminHotelController.js
+│       ├── adminUserController.js
+│       └── adminRoomController.js
+├── routes/
+│   ├── authRoutes.js
+│   ├── publicRoutes.js
+│   ├── guestRoutes.js
+│   ├── hotelManagerRoutes.js
+│   └── adminRoutes.js
+├── utils/
+│   ├── jwt.js
+│   └── passwordHash.js

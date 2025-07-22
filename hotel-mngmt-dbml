@@ -1,0 +1,92 @@
+// Project: Hotel Booking System
+// Note: Database schema for a hotel booking application.
+
+Table users {
+  id integer [pk, increment]
+  username varchar(50) [unique, not null]
+  email varchar(100) [unique, not null]
+  password_hash varchar(255) [not null]
+  role varchar(20) [not null, default: 'guest'] // 'guest', 'hotel_manager', 'admin'
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+}
+
+Table hotels {
+  id integer [pk, increment]
+  name varchar(255) [not null]
+  address text [not null]
+  city varchar(100) [not null]
+  state varchar(100) [not null]
+  country varchar(100) [not null]
+  postal_code varchar(20)
+  description text
+  star_rating integer [note: '1 to 5', not null]
+  image_url varchar(255)
+  manager_id integer
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+
+  Indexes {
+    manager_id
+  }
+}
+
+Table rooms {
+  id integer [pk, increment]
+  hotel_id integer [not null]
+  room_type varchar(100) [not null] // e.g., 'Standard', 'Deluxe', 'Suite'
+  description text
+  capacity integer [not null]
+  price_per_night numeric(10, 2) [not null]
+  num_rooms_available integer [not null]
+  amenities text
+  image_urls text
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+
+  Indexes {
+    hotel_id
+  }
+}
+
+Table room_availability {
+  id integer [pk, increment]
+  room_id integer [not null]
+  date date [not null]
+  available_rooms integer [not null]
+  price_override numeric(10, 2)
+
+  Indexes {
+    (room_id, date) [unique]
+  }
+}
+
+Table bookings {
+  id integer [pk, increment]
+  user_id integer [not null]
+  room_id integer [not null]
+  check_in_date date [not null]
+  check_out_date date [not null]
+  num_guests integer [not null]
+  num_rooms_booked integer [not null]
+  total_price numeric(10, 2) [not null]
+  booking_status varchar(50) [not null, default: 'pending'] // 'pending', 'confirmed', 'cancelled', 'completed'
+  payment_status varchar(50) [not null, default: 'pending'] // 'pending', 'paid', 'refunded'
+  special_requests text
+  booked_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+
+  Indexes {
+    user_id
+    room_id
+    check_in_date
+    check_out_date
+  }
+}
+
+// Relationships
+Ref: hotels.manager_id > users.id
+Ref: rooms.hotel_id > hotels.id
+Ref: room_availability.room_id > rooms.id
+Ref: bookings.user_id > users.id
+Ref: bookings.room_id > rooms.id
