@@ -3,7 +3,7 @@
 const db = require('../config/database');
 
 const createAvailability = async (roomId, date, availableRooms, priceOverride = null) => {
-  const res = await query(
+  const res = await db(
     `INSERT INTO room_availability (room_id, date, available_rooms, price_override)
      VALUES ($1, $2, $3, $4)
      ON CONFLICT (room_id, date) DO UPDATE SET
@@ -17,7 +17,7 @@ const createAvailability = async (roomId, date, availableRooms, priceOverride = 
 };
 
 const findAvailability = async (roomId, startDate, endDate) => {
-  const res = await query(
+  const res = await db(
     `SELECT * FROM room_availability
      WHERE room_id = $1 AND date BETWEEN $2 AND $3
      ORDER BY date`,
@@ -27,7 +27,7 @@ const findAvailability = async (roomId, startDate, endDate) => {
 };
 
 const findAvailabilityById = async (availabilityId) => {
-  const res = await query(
+  const res = await db(
     `SELECT * FROM room_availability
      WHERE id = $1`,
     [availabilityId]
@@ -52,7 +52,7 @@ const updateAvailability = async (availabilityId, data) => {
   }
 
   values.push(availabilityId); // Add id for the WHERE clause
-  const res = await query(
+  const res = await db(
     `UPDATE room_availability SET ${fields.join(', ')}, updated_at = NOW()
      WHERE id = $${paramIndex} RETURNING *`,
     values
@@ -61,13 +61,13 @@ const updateAvailability = async (availabilityId, data) => {
 };
 
 const deleteAvailability = async (availabilityId) => {
-  const res = await query('DELETE FROM room_availability WHERE id = $1 RETURNING id', [availabilityId]);
+  const res = await db('DELETE FROM room_availability WHERE id = $1 RETURNING id', [availabilityId]);
   return res.rows[0];
 };
 
 // --- Additional helpers for booking logic (read-only) ---
 const getAvailableRoomsForBooking = async (roomId, date) => {
-  const res = await query(
+  const res = await db(
     `SELECT available_rooms, COALESCE(price_override, r.price_per_night) AS effective_price
      FROM room_availability ra
      JOIN rooms r ON ra.room_id = r.id
@@ -79,7 +79,7 @@ const getAvailableRoomsForBooking = async (roomId, date) => {
 
 
 const decrementAvailableRooms = async (roomId, date, quantity) => {
-  const res = await query(
+  const res = await db(
     `UPDATE room_availability
      SET available_rooms = available_rooms - $3, updated_at = NOW()
      WHERE room_id = $1 AND date = $2 AND available_rooms >= $3
@@ -90,7 +90,7 @@ const decrementAvailableRooms = async (roomId, date, quantity) => {
 };
 
 const incrementAvailableRooms = async (roomId, date, quantity) => {
-  const res = await query(
+  const res = await db(
     `UPDATE room_availability
      SET available_rooms = available_rooms + $3, updated_at = NOW()
      WHERE room_id = $1 AND date = $2
