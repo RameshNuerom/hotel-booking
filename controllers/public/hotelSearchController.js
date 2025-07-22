@@ -1,6 +1,6 @@
  
 // controllers/public/hotelSearchController.js
-const roomAvailabilityService = require('../../services/roomAvailabilityService'); // Assuming search logic is here
+const roomAvailabilityService = require('../../services/admin/roomAvailabilityService'); // Assuming search logic is here
 
 const searchAvailableRooms = async (req, res, next) => {
   try {
