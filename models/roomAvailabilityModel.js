@@ -17,9 +17,9 @@ const createAvailability = async (roomId, date, availableRooms, priceOverride = 
 };
 
 const findAvailability = async (roomId, startDate, endDate) => {
-  const res = await db(
+  const res = await db.raw(
     `SELECT * FROM room_availability
-     WHERE room_id = $1 AND date BETWEEN $2 AND $3
+     WHERE room_id = ? AND date BETWEEN ? AND ?
      ORDER BY date`,
     [roomId, startDate, endDate]
   );
