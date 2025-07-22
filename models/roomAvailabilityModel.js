@@ -1,6 +1,6 @@
  
 // models/roomAvailabilityModel.js
-const { query } = require('../config/database');
+const db = require('../config/database');
 
 const createAvailability = async (roomId, date, availableRooms, priceOverride = null) => {
   const res = await query(

@@ -1,5 +1,5 @@
 // models/bookingModel.js
-const { query } = require('../config/database');
+const db = require('../config/database');
 
 const createBooking = async (bookingData) => {
   const {

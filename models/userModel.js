@@ -1,5 +1,5 @@
 // models/userModel.js
-const { query } = require('../config/database');
+const db = require('../config/database');
 
 const createUser = async (username, email, passwordHash, role) => {
   const res = await query(
